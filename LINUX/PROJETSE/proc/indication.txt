@@ -1,0 +1,26 @@
+===========================================
+MODULE AFFICHAGE PCB
+===========================================
+
+COMPILATION:
+------------
+gcc -o affichage affichage.c
+
+EXECUTION:
+----------
+./affichage &
+
+VERIFICATION:
+-------------
+ps aux | grep affichage
+
+ARRETER:
+--------
+killall affichage
+
+RESULTAT ATTENDU:
+-----------------
+PID: [nombre]
+PPID: [nombre]
+UID: 1000
+GID: 1000

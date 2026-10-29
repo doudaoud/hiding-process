@@ -1,0 +1,35 @@
+===========================================
+MODULE INVISIBILITE
+===========================================
+
+COMPILATION:
+------------
+make
+
+PREREQUIS:
+----------
+Le processus "affichage" doit etre lance:
+cd ../proc && ./affichage &
+
+TEST SANS LD_PRELOAD (processus visible):
+-----------------------------------------
+ps aux | grep affichage | grep -v grep
+
+TEST AVEC LD_PRELOAD (processus invisible):
+--------------------------------------------
+LD_PRELOAD=./libhook.so ps aux | grep affichage | grep -v grep
+
+RESULTAT ATTENDU:
+-----------------
+- Sans LD_PRELOAD: Une ligne montrant le processus
+- Avec LD_PRELOAD: Aucune ligne (processus invisible)
+
+AUTRES TESTS:
+-------------
+LD_PRELOAD=./libhook.so pgrep affichage
+LD_PRELOAD=./libhook.so top -b -n 1 | grep affichage
+
+NETTOYAGE:
+----------
+make clean
+killall affichage

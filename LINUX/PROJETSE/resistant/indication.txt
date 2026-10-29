@@ -1,0 +1,65 @@
+===========================================
+MODULE RESISTANCE
+===========================================
+
+INSTALLATION (REQUIS ROOT):
+---------------------------
+sudo ./install_systemd.sh
+
+TEST COMPLET AUTOMATIQUE:
+-------------------------
+sudo ./test_systemd.sh
+
+COMMANDES MANUELLES:
+--------------------
+
+1. Demarrer le service:
+   sudo systemctl start resistant
+
+2. Verifier le statut:
+   sudo systemctl status resistant
+
+3. Obtenir le PID:
+   systemctl show -p MainPID --value resistant
+
+4. Tester la resistance (SIGTERM ignore):
+   PID=$(systemctl show -p MainPID --value resistant)
+   sudo kill -TERM $PID
+   sleep 2
+   sudo systemctl status resistant
+   (Le PID reste le meme - signal ignore)
+
+5. Tester la relance (SIGKILL):
+   PID=$(systemctl show -p MainPID --value resistant)
+   echo "Ancien PID: $PID"
+   sudo kill -9 $PID
+   sleep 3
+   NEW_PID=$(systemctl show -p MainPID --value resistant)
+   echo "Nouveau PID: $NEW_PID"
+   (Le PID change - processus relance)
+
+6. Voir les logs:
+   sudo journalctl -u resistant -f
+   OU
+   tail -f /var/log/resistant.log
+
+7. Arreter le service:
+   sudo systemctl stop resistant
+
+8. Desactiver au demarrage:
+   sudo systemctl disable resistant
+
+RESULTAT ATTENDU:
+-----------------
+- Le processus ignore SIGTERM
+- Le processus se relance automatiquement apres kill -9
+- Nouveau PID apres chaque relance
+- Logs visibles dans journalctl
+
+DESINSTALLATION:
+----------------
+sudo systemctl stop resistant
+sudo systemctl disable resistant
+sudo rm /etc/systemd/system/resistant.service
+sudo rm /usr/local/bin/resistant_daemon
+sudo systemctl daemon-reload
